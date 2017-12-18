@@ -1,0 +1,31 @@
+{
+    "name": "villy/deku-time",
+    "description": "The mmc company algorithm for php version;",
+    "type": "library",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "zhaqiu",
+            "email": "34485431@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.0",
+        "deku/lunar-ime": "^1.0"
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url":  "git@gitee.com:rgdQ/LunarTme.git"
+        }
+    ],
+    "require-dev": {
+       "phpunit/phpunit": "^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "DekuTime\\": "src/"
+        }
+    }
+}

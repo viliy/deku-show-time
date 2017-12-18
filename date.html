@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>子夏的傻逼日期组件</title>
+
+    <link rel="stylesheet" href="./resource/css/layui.css">
+
+</head>
+<body>
+
+
+<ul class="layui-nav layui-bg-green">
+    <li class="layui-nav-item layui-col-md-offset1"><a href="">坑爹的日期组件</a></li>
+    <li class="layui-nav-item"><a href="">- -</a></li>
+    <li class="layui-nav-item"><a href="">- -</a></li>
+</ul>
+
+
+<div class="layui-row layui-container">
+
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">表格选择</li>
+            <li>手动输入</li>
+        </ul>
+        <div class="layui-tab-content" style="height: 130px;">
+
+            <div class="layui-tab-item layui-show">
+                <br>
+                <br>
+                <button class="layui-btn layui-anim-up" id="test7">输入日期>></button>
+                <div class="layui-inline">
+                    <input type="text" class="layui-input" id="test6-2">
+                </div>
+            </div>
+
+            <div class="layui-tab-item">
+                <div class="layui-form ">
+
+                    <br>
+                    <br>
+                    年：
+                    <div class="layui-inline">
+                        <input name="year"  lay-verify="year" placeholder="2017" autocomplete="off" class="layui-input"
+                               type="text">
+                    </div>
+
+                    年：
+                    <div class="layui-inline">
+                        <input name="month"  lay-verify="month" placeholder="01" autocomplete="off" class="layui-input"
+                               type="text">
+                    </div>
+
+
+                    日：
+                    <div class="layui-inline">
+                        <input type="text" lay-verify="date"  placeholder="01" autocomplete="off" class="layui-input" name="date">
+                    </div>
+                    时：
+                    <div class="layui-inline">
+                        <input type="text" lay-verify="hours" value="00" autocomplete="off" class="layui-input" name="hours">
+                    </div>
+                    分：
+                    <div class="layui-inline">
+                        <input type="text" lay-verify="minutes" value="00" autocomplete="off" class="layui-input" name="minutes">
+                    </div>
+                    <br><br>
+                    <div class="layui-form-item">
+                        <button class="layui-btn layui-btn-radius layui-anim-rotate" lay-submit="" lay-filter="sub">
+                            确认
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-progress">
+            <div class="layui-progress-bar layui-bg-cyan" lay-percent="100%"></div>
+        </div>
+        <table class="layui-table" id="table" style="display: none" lay-size="lg">
+            <colgroup>
+                <col width="150">
+                <col width="300">
+                <col>
+            </colgroup>
+            <thead>
+            <tr>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>阳历日期</td>
+                <td id="solar">2016-11-29</td>
+            </tr>
+            <tr>
+                <td>阴历日期</td>
+                <td id="lunar">2016-11-28</td>
+                <td id="lunar-1">2016-11-28</td>
+            </tr>
+            <tr>
+                <td>四柱</td>
+                <td id="zhu"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>五行</td>
+                <td id="wu"></td>
+                <td id="strong"></td>
+
+            </tr>
+            <tr>
+                <td>喜用神</td>
+                <td id="shen"></td>
+            </tr>
+            <tr>
+                <td>生肖</td>
+                <td id="sheng"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>星座</td>
+                <td id="xi"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>十神</td>
+                <td id="shi"></td>
+            </tr>
+            <tr>
+                <td>立春</td>
+                <td id="term"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <hr class="layui-bg-orange">
+</div>
+
+<script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.js"></script>
+<script src="./resource/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['laydate', 'form'], function () {
+        var laydate = layui.laydate;
+        var form = layui.form;
+
+        //自定义验证规则
+        form.verify({
+            year: function (value) {
+                if (value < 1900 || value > 2100) {
+                    return '年份必须在1900~2100之间';
+                }
+            }
+            , month: function (value) {
+                if (value === '' || value < 1 || value > 12) {
+                    return '月份必须在1~12月之间';
+                }
+            }
+            , date: function (value) {
+                if (value === '' || value < 1 || value > 31) {
+                    return '必须在1~31日之间';
+                }
+            }
+            , hours: function (value) {
+                if (value === '' || value < 0 || value > 23) {
+                    return '必须在0~24小时之间';
+                }
+            }
+            , minutes: function (value) {
+                if (value === '' || value < 0 || value > 59) {
+                    return '必须在0~60分之间';
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(sub)', function (data) {
+            console.log(data);
+
+            $.ajax({
+                url: '/index.php',
+                data: data.field,
+                type: 'get',
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+
+                    $('#table').css('display', 'table');
+                    $('#solar').html(data.self.solar_text);
+                    $('#lunar').html(data.self.lunar_text);
+                    $('#lunar-1').html(
+                        data.self.lunar_time.year + '年' +
+                        data.self.lunar_time.month + '月' +
+                        data.self.lunar_time.day + '日' +
+                        data.self.lunar_time.hour + '时'
+                    );
+
+                    $('#zhu').html(data.self.si_zhu.year + ' ' + data.self.si_zhu.month + ' ' + data.self.si_zhu.day + ' ' + data.self.si_zhu.hour);
+                    $('#shi').html(data.ming_pan.tian_gan_shi_shen.year + ' ' + data.ming_pan.tian_gan_shi_shen.month + ' ' + data.ming_pan.tian_gan_shi_shen.day + ' ' + data.ming_pan.tian_gan_shi_shen.hour);
+                    $('#wu').html(
+                        data.ming_pan.xi_yong_shen.gan_wu_xing.year +
+                        data.ming_pan.xi_yong_shen.zhi_wu_xing.year +
+                        ' ' +
+                        data.ming_pan.xi_yong_shen.gan_wu_xing.month +
+                        data.ming_pan.xi_yong_shen.zhi_wu_xing.month +
+                        ' ' +
+                        data.ming_pan.xi_yong_shen.gan_wu_xing.day +
+                        data.ming_pan.xi_yong_shen.zhi_wu_xing.day +
+                        ' ' +
+                        data.ming_pan.xi_yong_shen.gan_wu_xing.hour +
+                        data.ming_pan.xi_yong_shen.zhi_wu_xing.hour
+                    );
+                    $('#strong').html('偏' + data.ming_pan.xi_yong_shen.ba_zi_qiang_ruo);
+                    $('#xi').html(data.self.zodiac);
+                    $('#sheng').html(data.self.animal);
+                    $('#term').html(data.self.term);
+                    $('#shen').html(data.ming_pan.xi_yong_shen.xi_yong_shen);
+
+                },
+                error: function (xhr, type) {
+                    console.log(xhr, type);
+                }
+            })
+
+            return false;
+        });
+
+        //自定义背景色主题
+        laydate.render({
+            elem: '#test6-2' //指定元素
+            , type: 'datetime'
+            , theme: '#393D49'
+            //,range: true
+            , trigger: 'click'
+            , done: function (value, date, endDate) {
+                console.log(value, date, endDate);
+                $.ajax({
+                    url: '/index.php',
+                    data: date,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+
+                        $('#table').css('display', 'table');
+                        $('#solar').html(data.self.solar_text);
+                        $('#lunar').html(data.self.lunar_text);
+                        $('#lunar-1').html(
+                            data.self.lunar_time.year + '年' +
+                            data.self.lunar_time.month + '月' +
+                            data.self.lunar_time.day + '日' +
+                            data.self.lunar_time.hour + '时'
+                        );
+
+                        $('#zhu').html(data.self.si_zhu.year + ' ' + data.self.si_zhu.month + ' ' + data.self.si_zhu.day + ' ' + data.self.si_zhu.hour);
+                        $('#shi').html(data.ming_pan.tian_gan_shi_shen.year + ' ' + data.ming_pan.tian_gan_shi_shen.month + ' ' + data.ming_pan.tian_gan_shi_shen.day + ' ' + data.ming_pan.tian_gan_shi_shen.hour);
+                        $('#wu').html(
+                            data.ming_pan.xi_yong_shen.gan_wu_xing.year +
+                            data.ming_pan.xi_yong_shen.zhi_wu_xing.year +
+                            ' ' +
+                            data.ming_pan.xi_yong_shen.gan_wu_xing.month +
+                            data.ming_pan.xi_yong_shen.zhi_wu_xing.month +
+                            ' ' +
+                            data.ming_pan.xi_yong_shen.gan_wu_xing.day +
+                            data.ming_pan.xi_yong_shen.zhi_wu_xing.day +
+                            ' ' +
+                            data.ming_pan.xi_yong_shen.gan_wu_xing.hour +
+                            data.ming_pan.xi_yong_shen.zhi_wu_xing.hour
+                        );
+                        $('#strong').html('偏' + data.ming_pan.xi_yong_shen.ba_zi_qiang_ruo);
+                        $('#xi').html(data.self.zodiac);
+                        $('#sheng').html(data.self.animal);
+                        $('#term').html(data.self.term);
+                        $('#shen').html(data.ming_pan.xi_yong_shen.xi_yong_shen);
+
+                    },
+                    error: function (xhr, type) {
+                        console.log(xhr, type);
+                    }
+                })
+            }
+            , change: function (value, date, endDate) {
+                this.elem.val(value)
+            }
+        });
+
+
+    });
+</script>
+
+<script>
+
+    layui.use(['element', 'form'], function () {
+        var element = layui.element;
+
+    });
+</script>
+</body>
+</html>
